@@ -23,7 +23,22 @@
         font-size: 1.7rem;
         font-family: 'Oswald', sans-serif;
         white-space: normal;
-        margin-bottom: 50px;  
+        margin-bottom: 50px;
+      }
+      /* Animação de pulsar */
+      .iexperience-upsell {
+        animation: pulsar 1.5s infinite;
+      }
+      @keyframes pulsar {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
       }
     </style>
   </head>
@@ -39,7 +54,7 @@
         <div class="col-lg-8 text-center">
           <p class="lead">Parabéns por tomar o primeiro passo! Clique no botão abaixo para acessar a sua área de membros...</p>
           <!-- Botão com classe iexperience-upsell -->
-          <a href="#" class="btn btn-danger iexperience-upsell">ACESSAR A ÁREA DE MEMBROS!</a>
+          <a href=class="btn btn-danger iexperience-upsell">ACESSAR A ÁREA DE MEMBROS!</a>
         </div>
       </div>
     </div>
