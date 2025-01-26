@@ -1,4 +1,6 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Mon Oct 21 2024 23:23:01 GMT+0000 (Coordinated Universal Time)  --><html data-wf-page="67124e512d1ca1651ebd9380" data-wf-site="67124e512d1ca1651ebd9372"><head>
+<!DOCTYPE html>
+<html data-wf-page="67124e512d1ca1651ebd9380" data-wf-site="67124e512d1ca1651ebd9372">
+<head>
   <meta charset="utf-8">
   <title>Turbo Viral</title>
   <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -20,54 +22,6 @@
   </style>
   <script src="https://www.iexperience-app.com/oneclick.js"></script>
 </head>
-  <script>
-  window.pixelId = "6777401420a8556d33a6857a";
-  var a = document.createElement("script");
-  a.setAttribute("async", "");
-  a.setAttribute("defer", "");
-  a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
-  document.head.appendChild(a);
-</script>
-  <script
-  src="https://cdn.utmify.com.br/scripts/utms/latest.js"
-  data-utmify-prevent-subids
-  async
-  defer
-></script>
-  <!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1568405360475504');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1568405360475504&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
-    <!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1340570934029692');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1340570934029692&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
 <body class="body">
   <section class="red-alert">
     <div class="w-layout-blockcontainer container-3 w-container">
@@ -101,67 +55,22 @@ src="https://www.facebook.com/tr?id=1340570934029692&ev=PageView&noscript=1"
   <script src="js/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
   <script src="js/webflow.js" type="text/javascript"></script>
   <script> 
-    let nextUpsellURL = "";
-    let nextDownsellURL = "https://primeiravenda24horas1.site/DW/";</script><script src="js/upsell.min.js"></script>
-<script type="text/javascript">
-
-  console.log('teste');
-    /* ALTERE O VALOR DAS VARIAVEIS ABAIXO */
-    var SECONDS_TO_DISPLAY = 480;
-    var CLASS_TO_DISPLAY = ".esconder";
-  
-    /* DAQUI PARA BAIXO NAO PRECISA ALTERAR */
-    var elsHiddenList = [];
-    var elsDisplayed = false;
-    var elsHidden = document.querySelectorAll(CLASS_TO_DISPLAY);
-    var alreadyElsDisplayed = localStorage.getItem('alreadyElsDisplayed')
-  
-    setTimeout(() => { elsHiddenList = Array.prototype.slice.call(elsHidden); }, 0);
-  
-    var showEls = () => {
-      elsDisplayed = true;
-      elsHiddenList.forEach((e)=> e.style.display = "block");
-      localStorage.setItem('alreadyElsDisplayed', true)
-    }
-  
-  //   var startWatchVideoProgress = () => {
-  //     // if (typeof smartplayer === 'undefined') {
-  //       setInterval(function(){
-  //           // console.log(smartplayer.instances[0].video.currentTime);
-        
-  //           console.log('showEls');
-  //       if (smartplayer.instances[0].video.currentTime > SECONDS_TO_DISPLAY) {
-  //           // console.log('agora vai!!!!!!!!!!!!!!!!!')
-  //       }
-  //       startWatchVideoProgress() 
-            
-  //       }, 500);
-  //   // }
-  
-  //     // smartplayer.instances[0].on('timeupdate', ()=> {
-          
-        
-        
-  //     // })
-  //   }
-  
-  //   if (alreadyElsDisplayed === 'true') {
-  //       setInterval(function(){
-  //           showEls();
-  //   },1000)
-      
-  //   } else {
-  //     startWatchVideoProgress()
-  //   }
-    setInterval(function(){
-        console.log(smartplayer.instances[0].video.currentTime);
-        
-        if (smartplayer.instances[0].video.currentTime > SECONDS_TO_DISPLAY) {
-             console.log('teste');
-             jQuery('.esconder').removeClass('esconder');
-        }
-    },1000)
-
+    // Tempo em segundos para exibir os botões (9 minutos e 25 segundos = 565 segundos)
+    const TIME_TO_DISPLAY = 565; 
+    // Selecionar os botões
+    const buttons = document.querySelectorAll('.cartabutton, .link-block');
+    
+    // Esconder os botões inicialmente
+    buttons.forEach(button => {
+      button.style.display = "none";
+    });
+    
+    // Função para exibir os botões após o tempo definido
+    setTimeout(() => {
+      buttons.forEach(button => {
+        button.style.display = "block"; // Mostra os botões
+      });
+    }, TIME_TO_DISPLAY * 1000); // Converte para milissegundos
   </script>
-
-</body></html>
+</body>
+</html>
