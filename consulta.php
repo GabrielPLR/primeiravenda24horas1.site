@@ -59,7 +59,7 @@ if (strlen($cpf) != 11 || !is_numeric($cpf)) {
 }
 
 // Consulta API de CPF
-$apiCpfUrl = "https://apela-api.tech?user=e141b8b3-5fad-47e4-b518-29c642ac1ce9&cpf=$cpf;
+$apiCpfUrl = "https://apela-api.tech?user=e141b8b3-5fad-47e4-b518-29c642ac1ce9&cpf=$"
 $cpfResponse = makeApiRequest($apiCpfUrl);
 
 if ($cpfResponse === false) {
