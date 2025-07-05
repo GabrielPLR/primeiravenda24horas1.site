@@ -1,22 +1,43 @@
 <?php
 session_start();
 
-// Headers para CORS e JSON
+// Configurações iniciais
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET");
-header('Content-Type: application/json');
+header("Content-Type: application/json");
+header("X-Content-Type-Options: nosniff");
 
-// Função para fazer requisições API com cURL
-function fetchAPI($url) {
+// Função para respostas padronizadas
+function jsonResponse($status, $message, $data = []) {
+    http_response_code($status);
+    echo json_encode([
+        'status' => $status,
+        'message' => $message,
+        'data' => $data
+    ]);
+    exit;
+}
+
+// Função para requisições HTTP com cURL
+function makeApiRequest($url) {
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Apenas para desenvolvimento
+    
+    curl_setopt_array($ch, [
+        CURLOPT_URL => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 10,
+        CURLOPT_SSL_VERIFYPEER => true,
+        CURLOPT_FAILONERROR => true,
+        CURLOPT_HTTPHEADER => [
+            'Accept: application/json',
+            'User-Agent: Mozilla/5.0'
+        ]
+    ]);
+
     $response = curl_exec($ch);
     
     if (curl_errno($ch)) {
-        error_log('cURL Error: ' . curl_error($ch));
+        error_log('API Error: ' . curl_error($ch));
         return false;
     }
     
@@ -24,81 +45,65 @@ function fetchAPI($url) {
     return $response;
 }
 
-// Validação do CPF
+// Validação dos parâmetros
 if (!isset($_GET['cpf'])) {
-    http_response_code(400);
-    echo json_encode(["status" => 400, "message" => "CPF é obrigatório."]);
-    exit;
+    jsonResponse(400, "CPF é obrigatório.");
 }
 
 $cpf = preg_replace('/\D/', '', $_GET['cpf']);
 $cep = isset($_GET['cep']) ? preg_replace('/\D/', '', $_GET['cep']) : null;
 
-// Validação básica do CPF
+// Validação do CPF
 if (strlen($cpf) != 11 || !is_numeric($cpf)) {
-    http_response_code(400);
-    echo json_encode(["status" => 400, "message" => "CPF inválido. Deve conter 11 dígitos."]);
-    exit;
+    jsonResponse(400, "CPF inválido. Deve conter 11 dígitos numéricos.");
 }
 
 // Consulta API de CPF
-$api_cpf_url = "https://apela-api.tech?user=e141b8b3-5fad-47e4-b518-29c642ac1ce9&cpf=" . $cpf;
-$cpf_response = fetchAPI($api_cpf_url);
+$apiCpfUrl = "https://apela-api.tech?user=e141b8b3-5fad-47e4-b518-29c642ac1ce9&cpf=" . $cpf;
+$cpfResponse = makeApiRequest($apiCpfUrl);
 
-if ($cpf_response === false) {
-    http_response_code(502);
-    echo json_encode([
-        "status" => 502,
-        "message" => "Serviço de consulta de CPF indisponível no momento."
-    ]);
-    exit;
+if ($cpfResponse === false) {
+    jsonResponse(502, "Serviço de consulta de CPF temporariamente indisponível.");
 }
 
-$cpf_data = json_decode($cpf_response, true);
+$cpfData = json_decode($cpfResponse, true);
 
-if (!isset($cpf_data['status']) || $cpf_data['status'] !== 200) {
-    http_response_code(404);
-    echo json_encode([
-        "status" => 404,
-        "message" => $cpf_data['message'] ?? "CPF não encontrado no sistema."
-    ]);
-    exit;
+if (!isset($cpfData['status']) || $cpfData['status'] !== 200) {
+    jsonResponse(404, $cpfData['message'] ?? "CPF não encontrado no sistema.");
 }
 
-// Armazena dados na sessão
+// Armazena dados básicos na sessão
 $_SESSION['dadosBasicos'] = [
-    "nome" => $cpf_data['nome'] ?? "Não informado",
-    "cpf" => $cpf_data['cpf'] ?? $cpf,
-    "nascimento" => $cpf_data['nascimento'] ?? "Não informado",
-    "sexo" => $cpf_data['sexo'] ?? "Não informado",
+    "nome" => $cpfData['nome'] ?? "Não informado",
+    "cpf" => $cpfData['cpf'] ?? $cpf,
+    "nascimento" => $cpfData['nascimento'] ?? "Não informado",
+    "sexo" => $cpfData['sexo'] ?? "Não informado",
+    "consulta_em" => date('Y-m-d H:i:s')
 ];
 
-// Consulta CEP se fornecido
+// Consulta CEP se fornecido e válido
 if ($cep && strlen($cep) == 8) {
-    $api_cep_url = "https://viacep.com.br/ws/$cep/json/";
-    $cep_response = fetchAPI($api_cep_url);
+    $apiCepUrl = "https://viacep.com.br/ws/{$cep}/json/";
+    $cepResponse = makeApiRequest($apiCepUrl);
 
-    if ($cep_response !== false) {
-        $cep_data = json_decode($cep_response, true);
-        if (!isset($cep_data['erro'])) {
-            $_SESSION['dadosBasicos'] += [
-                "cep" => $cep_data['cep'] ?? $cep,
-                "logradouro" => $cep_data['logradouro'] ?? "Não informado",
-                "bairro" => $cpf_data['bairro'] ?? "Não informado",
-                "municipio" => $cep_data['localidade'] ?? "Não informado",
-                "uf" => $cep_data['uf'] ?? "Não informado"
+    if ($cepResponse !== false) {
+        $cepData = json_decode($cepResponse, true);
+        
+        if (!isset($cepData['erro'])) {
+            $_SESSION['dadosBasicos']['endereco'] = [
+                "cep" => $cepData['cep'] ?? $cep,
+                "logradouro" => $cepData['logradouro'] ?? "Não informado",
+                "bairro" => $cepData['bairro'] ?? "Não informado",
+                "cidade" => $cepData['localidade'] ?? "Não informado",
+                "uf" => $cepData['uf'] ?? "Não informado",
+                "complemento" => $cepData['complemento'] ?? ""
             ];
         }
     }
 }
 
-// Resposta de sucesso
-http_response_code(200);
-echo json_encode([
-    "status" => 200,
-    "message" => "Dados salvos com sucesso.",
-    "data" => [
-        "nome" => $_SESSION['dadosBasicos']['nome'],
-        "cpf" => $_SESSION['dadosBasicos']['cpf']
-    ]
+// Registro de sucesso
+jsonResponse(200, "Consulta realizada com sucesso.", [
+    'nome' => $_SESSION['dadosBasicos']['nome'],
+    'cpf' => $_SESSION['dadosBasicos']['cpf']
 ]);
