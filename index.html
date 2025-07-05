@@ -160,7 +160,6 @@
     </div>
   </footer>
 
-  <!-- Script otimizado -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Elementos DOM
@@ -181,38 +180,13 @@
         if (value.length > 7) value = value.replace(/^(\d{3})\.(\d{3})/, '$1.$2.');
         if (value.length > 11) value = value.replace(/^(\d{3})\.(\d{3})\.(\d{3})/, '$1.$2.$3-');
         e.target.value = value.substring(0, 14);
-        validateCpf();
       });
 
       cepInput.addEventListener('input', function(e) {
         let value = e.target.value.replace(/\D/g, '');
         if (value.length > 5) value = value.replace(/^(\d{5})/, '$1-');
         e.target.value = value.substring(0, 9);
-        validateCep();
       });
-
-      // Validações em tempo real
-      function validateCpf() {
-        const cpfDigits = cpfInput.value.replace(/\D/g, '');
-        if (cpfDigits.length === 11) {
-          cpfInput.classList.remove('input-error');
-          cpfError.style.display = 'none';
-          return true;
-        }
-        return false;
-      }
-
-      function validateCep() {
-        if (cepCheckbox.checked) return true;
-        
-        const cepDigits = cepInput.value.replace(/\D/g, '');
-        if (cepDigits.length === 8) {
-          cepInput.classList.remove('input-error');
-          cepError.style.display = 'none';
-          return true;
-        }
-        return false;
-      }
 
       // Gerenciamento do checkbox CEP
       cepCheckbox.addEventListener('change', function() {
@@ -220,8 +194,6 @@
         cepInput.required = !this.checked;
         if (this.checked) {
           cepInput.value = '';
-          cepInput.classList.remove('input-error');
-          cepError.style.display = 'none';
         }
       });
 
@@ -229,40 +201,39 @@
       form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        // Validações finais
-        const isCpfValid = validateCpf();
-        const isCepValid = validateCep();
-        
-        if (!isCpfValid) {
-          cpfInput.classList.add('input-error');
-          cpfError.style.display = 'block';
-          return;
-        }
-
-        if (!isCepValid) {
-          cepInput.classList.add('input-error');
-          cepError.style.display = 'block';
-          return;
-        }
-
-        // Preparar para requisição
+        // Obter e limpar valores
         const cpf = cpfInput.value.replace(/\D/g, '');
         const cep = cepCheckbox.checked ? '' : cepInput.value.replace(/\D/g, '');
         
+        // Validações
+        if (cpf.length !== 11) {
+          cpfError.style.display = 'block';
+          return;
+        } else {
+          cpfError.style.display = 'none';
+        }
+
+        if (!cepCheckbox.checked && cep.length !== 8) {
+          cepError.style.display = 'block';
+          return;
+        } else {
+          cepError.style.display = 'none';
+        }
+
+        // Configuração do botão e loading
         consultarBtn.disabled = true;
         btnText.textContent = 'Processando...';
         loadingContainer.style.display = 'block';
 
         try {
-          // Configurar timeout de 15 segundos
           const controller = new AbortController();
-          const timeout = setTimeout(() => controller.abort(), 15000);
+          const timeoutId = setTimeout(() => controller.abort(), 15000);
 
           const response = await fetch(`consulta.php?cpf=${cpf}&cep=${cep}`, {
             signal: controller.signal
           });
 
-          clearTimeout(timeout);
+          clearTimeout(timeoutId);
 
           if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
@@ -278,18 +249,7 @@
           }
         } catch (error) {
           console.error('Erro detalhado:', error);
-          
-          let errorMessage = 'Erro ao processar sua solicitação';
-          if (error.name === 'AbortError') {
-            errorMessage = 'Tempo de espera esgotado. Tente novamente mais tarde.';
-          } else if (error.message.includes('Failed to fetch')) {
-            errorMessage = 'Não foi possível conectar ao servidor. Verifique sua conexão.';
-          } else {
-            errorMessage = error.message || errorMessage;
-          }
-
-          // Mostrar erro em um popup ou alerta estilizado
-          alert(errorMessage);
+          alert(`Erro: ${error.message}\nPor favor, tente novamente.`);
         } finally {
           consultarBtn.disabled = false;
           btnText.textContent = 'Consultar';
@@ -297,26 +257,6 @@
         }
       });
     });
-
-    // Código APELAUTM mantido
-    var timer = setInterval(function() {
-      const location = new URL(document.location.href);
-      const fields = ["src", "sck", "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
-      var links = document.getElementsByTagName("a");
-      
-      for (var i = 0, n = links.length; i < n; i++) {
-        if (links[i].href.includes("#")) continue;
-        if (links[i].href) {
-          let link = new URL(links[i].href);
-          fields.forEach(field => {
-            if (location.searchParams.get(field))
-              link.searchParams.set(field, location.searchParams.get(field));
-          });
-          let href = link.href;
-          links[i].href = href;
-        }
-      }
-    }, 500);
   </script>
 </body>
 </html>
