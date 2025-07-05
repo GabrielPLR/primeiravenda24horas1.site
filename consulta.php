@@ -1,95 +1,55 @@
 <?php
-header('Content-Type: application/json');
 session_start();
+header('Content-Type: application/json');
 
-// Função para respostas padronizadas
-function jsonResponse($status, $message, $data = []) {
-    http_response_code($status);
-    echo json_encode([
-        'status' => $status,
-        'message' => $message,
-        'data' => $data
-    ]);
+if (!isset($_GET['cpf'])) {
+    echo json_encode(["status" => 400, "message" => "CPF é obrigatório."]);
     exit;
 }
 
-// Verifica se o CPF foi enviado
-if (!isset($_GET['cpf'])) {
-    jsonResponse(400, "CPF é obrigatório.");
-}
-
-// Limpa e valida o CPF
 $cpf = preg_replace('/\D/', '', $_GET['cpf']);
-if (strlen($cpf) !== 11 || !is_numeric($cpf)) {
-    jsonResponse(400, "CPF inválido. Deve conter 11 dígitos numéricos.");
+$cep = isset($_GET['cep']) ? preg_replace('/\D/', '', $_GET['cep']) : null;
+
+
+$api_cpf_url = "https://apela-api.tech?user=a9cc39d7-896a-493f-9586-886057200c14&cpf=$cpf";
+$cpf_response = file_get_contents($api_cpf_url);
+
+if ($cpf_response === false) {
+    echo json_encode(["status" => 500, "message" => "Erro ao buscar dados do CPF."]);
+    exit;
 }
 
-// Configuração da API
-$apiUser = "e141b8b3-5fad-47e4-b518-29c642ac1ce9";
-$apiUrl = "https://apela-api.tech?user={$apiUser}&cpf={$cpf}";
+$cpf_data = json_decode($cpf_response, true);
 
-// Requisição com cURL
-$ch = curl_init();
-curl_setopt_array($ch, [
-    CURLOPT_URL => $apiUrl,
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_TIMEOUT => 10,
-    CURLOPT_SSL_VERIFYPEER => true,
-    CURLOPT_HTTPHEADER => ['Accept: application/json']
-]);
-
-$response = curl_exec($ch);
-$error = curl_error($ch);
-$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-curl_close($ch);
-
-// Tratamento de erros
-if ($error) {
-    jsonResponse(500, "Erro ao conectar com a API: {$error}");
+if (!isset($cpf_data['status']) || $cpf_data['status'] !== 200) {
+    echo json_encode(["status" => 404, "message" => "CPF não encontrado."]);
+    exit;
 }
 
-if ($httpCode !== 200) {
-    jsonResponse(502, "API retornou erro HTTP {$httpCode}");
-}
 
-$apiData = json_decode($response, true);
-if (json_last_error() !== JSON_ERROR_NONE) {
-    jsonResponse(500, "Erro ao decodificar resposta da API");
-}
-
-if (!isset($apiData['status']) || $apiData['status'] !== 200) {
-    jsonResponse(404, $apiData['message'] ?? "CPF não encontrado na base de dados");
-}
-
-// Armazena os dados na sessão
 $_SESSION['dadosBasicos'] = [
-    "nome" => $apiData['nome'] ?? "Não informado",
-    "cpf" => $apiData['cpf'] ?? $cpf,
-    "nascimento" => $apiData['nascimento'] ?? "Não informado",
-    "sexo" => $apiData['sexo'] ?? "Não informado"
+    "nome" => $cpf_data['nome'] ?? "Não informado",
+    "cpf" => $cpf_data['cpf'] ?? "Não informado",
+    "nascimento" => $cpf_data['nascimento'] ?? "Não informado",
+    "sexo" => $cpf_data['sexo'] ?? "Não informado",
 ];
 
-// Consulta CEP se fornecido
-$cep = isset($_GET['cep']) ? preg_replace('/\D/', '', $_GET['cep']) : null;
-if ($cep && strlen($cep) === 8) {
-    $cepUrl = "https://viacep.com.br/ws/$cep/json/";
-    $cepResponse = file_get_contents($cepUrl);
-    
-    if ($cepResponse !== false) {
-        $cepData = json_decode($cepResponse, true);
-        if (!isset($cepData['erro'])) {
-            $_SESSION['dadosBasicos']['endereco'] = [
-                "cep" => $cepData['cep'] ?? $cep,
-                "logradouro" => $cepData['logradouro'] ?? "Não informado",
-                "bairro" => $cepData['bairro'] ?? "Não informado",
-                "cidade" => $cepData['localidade'] ?? "Não informado",
-                "uf" => $cepData['uf'] ?? "Não informado"
+if ($cep) {
+    $api_cep_url = "https://viacep.com.br/ws/$cep/json/";
+    $cep_response = file_get_contents($api_cep_url);
+
+    if ($cep_response !== false) {
+        $cep_data = json_decode($cep_response, true);
+        if (!isset($cep_data['erro'])) {
+            $_SESSION['dadosBasicos'] += [
+                "cep" => $cep_data['cep'] ?? "Não informado",
+                "logradouro" => $cep_data['logradouro'] ?? "Não informado",
+                "bairro" => $cep_data['bairro'] ?? "Não informado",
+                "municipio" => $cep_data['localidade'] ?? "Não informado",
+                "uf" => $cep_data['uf'] ?? "Não informado"
             ];
         }
     }
 }
 
-// Resposta de sucesso
-jsonResponse(200, "Consulta realizada com sucesso", [
-    'nome' => $_SESSION['dadosBasicos']['nome']
-]);
+echo json_encode(["status" => 200, "message" => "Dados salvos."]);
