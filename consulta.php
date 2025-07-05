@@ -1,6 +1,6 @@
 <?php
-session_start();
 header('Content-Type: application/json');
+session_start();
 
 // Função para respostas padronizadas
 function jsonResponse($status, $message, $data = []) {
@@ -24,11 +24,11 @@ if (strlen($cpf) !== 11 || !is_numeric($cpf)) {
     jsonResponse(400, "CPF inválido. Deve conter 11 dígitos numéricos.");
 }
 
-// Configuração da API com seu token
+// Configuração da API
 $apiUser = "e141b8b3-5fad-47e4-b518-29c642ac1ce9";
-$apiUrl = "https://apela-api.tech?user=" . urlencode($apiUser) . "&cpf=" . urlencode($cpf);
+$apiUrl = "https://apela-api.tech?user={$apiUser}&cpf={$cpf}";
 
-// Faz a requisição usando cURL (mais confiável que file_get_contents)
+// Requisição com cURL
 $ch = curl_init();
 curl_setopt_array($ch, [
     CURLOPT_URL => $apiUrl,
@@ -45,11 +45,11 @@ curl_close($ch);
 
 // Tratamento de erros
 if ($error) {
-    jsonResponse(500, "Erro ao conectar com a API: " . $error);
+    jsonResponse(500, "Erro ao conectar com a API: {$error}");
 }
 
 if ($httpCode !== 200) {
-    jsonResponse(502, "API retornou erro HTTP " . $httpCode);
+    jsonResponse(502, "API retornou erro HTTP {$httpCode}");
 }
 
 $apiData = json_decode($response, true);
