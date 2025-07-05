@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ebook de Rastreamento</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-color: #eef2f3;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #663399;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+        }
+        .logo {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            font-weight: bold;
+            color: #663399;
+            background-color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        nav ul li {
+            display: inline;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        .hero {
+            background-color: #8855aa;
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+        }
+        .info, .extra-info {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .info {
+            background-color: #444444;
+            color: white;
+        }
+        .extra-info {
+            background-color: #ffffff;
+        }
+        .btn-gradient {
+            background: linear-gradient(90deg, #663399, #9966cc);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        footer {
+            background-color: #442266;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        footer p {
+            margin: 5px 0;
+        }
+        footer a {
+            color: #cc99ff;
+            text-decoration: none;
+        }
+        @media (max-width: 768px) {
+            .logo {
+                position: relative;
+                display: block;
+                text-align: center;
+                margin: 10px auto;
+            }
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .hero, .info, .extra-info {
+                padding: 20px;
+            }
+            .btn-gradient {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">EBOOK<br>Fornecedores Confiáveis</div>
+        <h1>Rastreamento Inteligente</h1>
+        <nav>
+            <ul>
+                <li><a href="#ebook">EBOOK</a></li>
+                <li><a href="#fornecedores">Lista Secreta</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section id="ebook" class="hero">
+            <h2>Aprenda a Rastrear com Precisão!</h2>
+            <p>Com nosso guia exclusivo, você dominará o rastreamento de encomendas de maneira eficiente.</p>
+            <p><strong>Valor: R$ 39,90</strong></p>
+            <p>Esse preço inclui um material completo com estratégias atualizadas e eficazes.</p>
+            <button class="btn-gradient" onclick="comprar()">Quero meu eBook agora!</button>
+        </section>
+        <section class="info">
+            <h3>O QUE VOCÊ VAI DESCOBRIR:</h3>
+            <p>✔ Como identificar fornecedores confiáveis e acessíveis.</p>
+            <p>✔ Métodos avançados para rastreamento de pacotes internacionais.</p>
+            <p>✔ Ferramentas essenciais para otimizar seu tempo e evitar atrasos.</p>
+            <p>✔ Como evitar golpes e garantir segurança em suas compras.</p>
+            <p>✔ Este guia é ideal para quem deseja importar produtos sem preocupações.</p>
+        </section>
+        <section class="extra-info">
+            <h3>POR QUE ESSE EBOOK É PARA VOCÊ?</h3>
+            <p>✔ Técnicas atualizadas para rastrear pacotes rapidamente.</p>
+            <p>✔ Métodos inteligentes para evitar taxas inesperadas.</p>
+            <p>✔ Ferramentas e aplicativos para rastreamento eficiente.</p>
+            <p>✔ Estratégias para maximizar economia e segurança.</p>
+            <p>✔ Dicas valiosas para compras internacionais seguras.</p>
+            <button class="btn-gradient" onclick="comprar()">Quero começar agora!</button>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 MAPFRE SEGUROS GERAIS S.A. Todos os direitos reservados.</p>
+        <p>CNPJ: 61.074.175/0001-38</p>
+        <p><a href="/politica-de-privacidade">Política de Privacidade</a> | <a href="/termos-de-uso">Termos de Uso</a></p>
+    </footer>
+</body>
+</html>

