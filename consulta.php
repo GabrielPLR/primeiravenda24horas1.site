@@ -11,7 +11,7 @@ $cpf = preg_replace('/\D/', '', $_GET['cpf']);
 $cep = isset($_GET['cep']) ? preg_replace('/\D/', '', $_GET['cep']) : null;
 
 
-$api_cpf_url = "https://apela-api.tech?user=e141b8b3-5fad-47e4-b518-29c642ac1ce9&cpf=$cpf";
+$api_cpf_url = "https://apela-api.tech?user=a9cc39d7-896a-493f-9586-886057200c14&cpf=$cpf";
 $cpf_response = file_get_contents($api_cpf_url);
 
 if ($cpf_response === false) {
